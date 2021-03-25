@@ -31,7 +31,7 @@ class SaltWrappers:
             raise ValueError(f'Invalid argument: on_salt_error={on_salt_error}')
         try:
             salt_cmd = f"salt-call {method} {key} --out=json"
-            Log.info(f"Executing salt-call: {salt_cmd}")
+            Log.error(f"Executing salt-call: {salt_cmd}")
             process = SimpleProcess(salt_cmd)
             stdout, stderr, rc = process.run()
         except Exception as e:
@@ -46,6 +46,7 @@ class SaltWrappers:
         res = stdout.decode('utf-8')
         if rc == 0 and res != "":
             result = json.loads(res)
+            Log.error(f"result:{result}")
             return result['local']
 
     @staticmethod

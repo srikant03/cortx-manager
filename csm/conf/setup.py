@@ -548,6 +548,7 @@ class Setup:
         if backend not in ('es', 'consul'):
             raise CsmSetupError(f'Invalid database backend "{addr}"')
         key = f'databases.{backend}_db.config.host'
+        Log.error(f"backend:{backend}, key: {key}, addr:{addr}")
         try:
             Conf.set(const.DATABASE_INDEX, key, addr)
             Conf.save(const.DATABASE_INDEX)
@@ -822,6 +823,7 @@ class CsmSetup(Setup):
                     Log.error(f"Failed to fetch system node ids info from provisioner cli.- {e}")
                 minion_id = cls._get_minion_id()
                 data_nw = cls._get_data_nw_info(minion_id)
+                Log.error(f"data_nw:{data_nw}")
                 cls._set_db_host_addr('consul', data_nw.get('roaming_ip', 'localhost'))
                 cls._set_db_host_addr('es', data_nw.get('pvt_ip_addr', 'localhost'))
             self.ConfigServer.reload()
